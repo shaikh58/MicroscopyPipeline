@@ -6,8 +6,8 @@ from pathlib import Path
 import h5py
 import tifffile
 from cellpose import models
-from docker.client import DockerClient
-from docker.types import Mount
+# from docker.client import DockerClient
+# from docker.types import Mount
 from scipy import ndimage
 from tqdm import trange
 import holoviews as hv
@@ -70,14 +70,14 @@ def view_segmentation_overlay(
     ).cols(1)
 
 
-def segment_stack(path: Path, model: Path, export_tiff=True):
+def segment_stack(path: Path, out_path: Path, model: Path, diam_px=15, export_tiff=True):
     print(f"segmenting stack at {path} with model at {model}")
     stack = read_stack(path)
 
     frames, Y, X = stack.shape
     # frames, _, Y, X, _ = stack.shape
 
-    new_file_path = path.parent / f"{path.stem}_segmented.h5"
+    new_file_path = out_path / f"{path.stem}_segmented.h5"
     dataset_name = "data"
 
     with h5py.File(new_file_path, "w") as f:
@@ -86,11 +86,11 @@ def segment_stack(path: Path, model: Path, export_tiff=True):
         )
 
         for frame in trange(frames):
-            masks, center_of_mass = segment_frame(stack[frame, ...], model, gpu=True)
+            masks, center_of_mass = segment_frame(stack[frame, ...], model, gpu=True, diameter=diam_px)
             dataset[frame, :, :] = masks
 
         if export_tiff:
-            new_tiff_path = path.parent / f"{path.stem}_segmented.tiff"
+            new_tiff_path = out_path / f"{path.stem}_segmented.tif"
             print(f"exporting to tiff at {new_tiff_path}")
             with tifffile.TiffWriter(new_tiff_path, bigtiff=True) as tif:
                 tif.write(f.get(dataset_name), shape=(frames, Y, X))
@@ -98,21 +98,23 @@ def segment_stack(path: Path, model: Path, export_tiff=True):
     print("segmentation complete")
 
 
-def segment_frame(img, model: Path, gpu: bool = False, diameter: int = 25):
+def segment_frame(img, model: Path, gpu: bool = True, diameter: int = 25):
     channels = [0, 0]
     net_avg = False
     resample = False
+     # use builtin latest cyto3 model
+    model = models.Cellpose(gpu=gpu, model_type='cyto3')
 
-    model = models.CellposeModel(
-        gpu=gpu,
-        pretrained_model=str(model.absolute()),
-        nchan=2,
-    )
-    masks, flows, styles = model.eval(
+    # model = models.CellposeModel(
+    #     gpu=gpu,
+    #     pretrained_model=str(model.absolute()),
+    #     nchan=2,
+    # )
+    masks, flows, styles, diams = model.eval(
         img.astype(np.float16, copy=False),
         diameter=diameter,
+        cellprob_threshold=0.3,
         channels=channels,
-        net_avg=net_avg,
         resample=resample,
         z_axis=0,
     )
@@ -122,6 +124,7 @@ def segment_frame(img, model: Path, gpu: bool = False, diameter: int = 25):
     )
 
     return masks, center_of_mass
+
 
 
 def run_trackmate(settings_path: Path, data_path: Path):
@@ -181,4 +184,4 @@ def run_pipeline(
     print(f"Tracking result saved to:\t{trackmate_results_path.absolute()}")
 
 
-docker_client = DockerClient()
+# docker_client = DockerClient()
