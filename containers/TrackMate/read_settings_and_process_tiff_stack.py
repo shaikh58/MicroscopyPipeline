@@ -19,9 +19,10 @@ sys.setdefaultencoding("utf-8")
 # -----------------
 # Read data stack
 # -----------------
-segmented_path = "/Users/mustafashaikh/Documents/mot/TrackMate-Python/simulated-segmented"
-tracked_path = "/Users/mustafashaikh/Documents/mot/TrackMate-Python/tracked-simulated-segmentations"
-settings_path = "/Users/mustafashaikh/Documents/mot/MicroscopyPipeline/models/trackmate/trackmate_settings_lysosomes.xml"
+segmented_path = "/Volumes/talmo/mustafa/TrackMate-Python/simulated-segmented"
+tracked_path = "/Volumes/talmo/mustafa/TrackMate-Python/tracked-simulated-segmentations"
+settings_path = "/Users/main/Documents/GitHub/MicroscopyPipeline/models/trackmate/trackmate_settings_lysosomes.xml"
+# settings_path = "/Users/mustafashaikh/Documents/mot/MicroscopyPipeline/models/trackmate/trackmate_settings_lysosomes.xml"
 
 for segmented_file in os.listdir(segmented_path):
     if not segmented_file.endswith(".tif"):

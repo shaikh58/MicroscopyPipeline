@@ -148,3 +148,5 @@ dmypy.json
 *.cpproj
 *.doc*
 /*/*/*.tiff.xml
+containers/.DS_Store
+.DS_Store
