@@ -19,8 +19,8 @@ sys.setdefaultencoding("utf-8")
 # -----------------
 # Read data stack
 # -----------------
-segmented_path = "/Volumes/talmo/mustafa/TrackMate-Python/simulated-segmented"
-tracked_path = "/Volumes/talmo/mustafa/TrackMate-Python/tracked-simulated-segmentations"
+segmented_path = "/Volumes/talmo/mustafa/TrackMate-Python/simulated-segmented-thinned"
+tracked_path = "/Volumes/talmo/mustafa/TrackMate-Python/tracked-simulated-segmentations-thinned"
 settings_path = "/Users/main/Documents/GitHub/MicroscopyPipeline/models/trackmate/trackmate_settings_lysosomes.xml"
 # settings_path = "/Users/mustafashaikh/Documents/mot/MicroscopyPipeline/models/trackmate/trackmate_settings_lysosomes.xml"
 
