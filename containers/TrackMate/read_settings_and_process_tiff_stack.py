@@ -16,11 +16,11 @@ from fiji.plugin.trackmate.io import TmXmlReader, TmXmlWriter, CSVExporter
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-# -----------------
-# Read data stack
-# -----------------
-segmented_path = "/Volumes/talmo/mustafa/TrackMate-Python/simulated-segmented-thinned"
-tracked_path = "/Volumes/talmo/mustafa/TrackMate-Python/tracked-simulated-segmentations-thinned"
+# # -----------------
+# # Read data stack
+# # -----------------
+segmented_path = "/Users/main/Documents/public-data-test-sets/simulated-segmented-thinned"
+tracked_path = "/Users/main/Documents/public-data-test-sets/tracked-simulated-segmented-thinned"
 settings_path = "/Users/main/Documents/GitHub/MicroscopyPipeline/models/trackmate/trackmate_settings_lysosomes.xml"
 # settings_path = "/Users/mustafashaikh/Documents/mot/MicroscopyPipeline/models/trackmate/trackmate_settings_lysosomes.xml"
 
@@ -55,6 +55,7 @@ for segmented_file in os.listdir(segmented_path):
     # -------------------
 
     trackmate = TrackMate(model, settings)
+    print(trackmate.checkInput())
 
     # --------
     # Process
